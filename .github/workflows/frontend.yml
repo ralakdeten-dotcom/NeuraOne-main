@@ -1,0 +1,46 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: services/crm/frontend/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd services/crm/frontend
+        npm ci
+    
+    - name: Run type checking
+      run: |
+        cd services/crm/frontend
+        npm run type-check
+    
+    - name: Run linting
+      run: |
+        cd services/crm/frontend
+        npm run lint
+    
+    - name: Run tests
+      run: |
+        cd services/crm/frontend
+        npm run test
+    
+    - name: Build
+      run: |
+        cd services/crm/frontend
+        npm run build

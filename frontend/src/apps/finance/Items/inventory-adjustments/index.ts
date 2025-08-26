@@ -1,0 +1,1 @@
+export { InventoryAdjustmentsListPage } from './InventoryAdjustmentsListPage'

@@ -1,0 +1,59 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_crm_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        cd services/crm/backend
+        python -m pip install --upgrade pip
+        pip install -r requirements/dev.txt
+    
+    - name: Run tests
+      env:
+        DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_crm_db
+        SECRET_KEY: test-secret-key
+        DEBUG: True
+      run: |
+        cd services/crm/backend
+        python manage.py test
+    
+    - name: Run linting
+      run: |
+        cd services/crm/backend
+        ruff check .
+        black --check .
+    
+    - name: Run type checking
+      run: |
+        cd services/crm/backend
+        python -m py_compile **/*.py
