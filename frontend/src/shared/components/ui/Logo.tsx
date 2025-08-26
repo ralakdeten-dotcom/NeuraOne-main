@@ -31,7 +31,7 @@ export const Logo: React.FC<LogoProps> = ({
     <div className={`flex items-center ${className}`}>
       <img 
         src="/favicon.svg" 
-        alt="NeuraCRM Logo" 
+        alt="NeuraOne Logo" 
         className={`${sizeClasses[size]} flex-shrink-0`}
       />
       {showText && (
@@ -40,7 +40,7 @@ export const Logo: React.FC<LogoProps> = ({
             ? 'text-white' 
             : 'text-gray-900 dark:text-white'
         } ${textSizes[size]}`}>
-          NeuraCRM
+          NeuraOne
         </span>
       )}
     </div>

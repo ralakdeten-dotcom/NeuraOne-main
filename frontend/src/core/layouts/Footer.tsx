@@ -12,11 +12,11 @@ export const Footer: React.FC = () => {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
 
-                <span className="text-blue-600 dark:text-blue-400 font-bold text-lg">NeuraCRM</span>
+                <span className="text-blue-600 dark:text-blue-400 font-bold text-lg">NeuraOne</span>
                 <span className="text-gray-400 dark:text-gray-500">•</span>
                 <span className="text-sm text-gray-500 dark:text-gray-400">
 
-                  © {currentYear} NeuraCRM. All rights reserved.
+                  © {currentYear} NeuraOne. All rights reserved.
                 </span>
               </div>
             </div>

@@ -292,7 +292,7 @@ export function FinanceDashboard() {
           </div>
           <div className="text-right">
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
-              NeuraCRM Sales Helpline: +44 9999999999
+              NeuraOne Sales Helpline: +44 9999999999
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Mon - Fri • 9:00 AM - 5:00 PM BST
