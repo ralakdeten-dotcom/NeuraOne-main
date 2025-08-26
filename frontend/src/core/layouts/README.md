@@ -1,6 +1,6 @@
 # Layout Components
 
-This directory contains reusable layout components for the NeuraCRM application.
+This directory contains reusable layout components for the NeuraOne application.
 
 ## Components
 

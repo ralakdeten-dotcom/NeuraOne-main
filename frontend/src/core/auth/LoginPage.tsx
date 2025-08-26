@@ -51,7 +51,7 @@ export const LoginPage: React.FC = () => {
             <Logo size="xl" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to NeuraCRM
+            Sign in to NeuraOne
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Enter your credentials to access your account
