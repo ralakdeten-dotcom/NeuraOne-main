@@ -17,21 +17,18 @@ import { InvoiceDetailsRoute } from './Old Sales App/invoices/pages/InvoiceDetai
 import { EditInvoiceRoute } from './Old Sales App/invoices/pages/EditInvoiceRoute';
 import { ProfilePlaceholder } from './Old Sales App/ProfilePlaceholder';
 import { PageLayout } from '@/core/layouts/PageLayout';
-import { FinanceLayout } from './layouts/FinanceLayout';
+import { OldSalesAppLayout } from './Old Sales App/layouts';
 
-import { EmptyPlaceholder } from './components/EmptyPlaceholder';
-import { Dashboard } from './Home';
-import { AccountsList } from './Accountant/ChartsOfAccounts/AccountsList';
-import { AccountDetails } from './Accountant/ChartsOfAccounts/AccountDetails';
+import { EmptyPlaceholder } from './layout/EmptyPlaceholder';
+import { AccountsList, AccountDetails } from './modules/accountant';
 
-import { CustomersList } from './Sales/Customers/CustomersList';
-import { CustomerCreate } from './Sales/Customers/CustomerCreate';
-import { QuotesList } from './Sales/Quotes/QuotesList';
+import { CustomersList, CustomerCreate } from './modules/sales/customers';
+import { QuotesList } from './modules/sales/quotes';
 
-import { VendorsList } from './Purchases/Vendors/VendorsList';
-import { VendorCreate } from './Purchases/Vendors/VendorCreate';
+import { VendorsList, VendorCreate } from './modules/purchases';
 
-import { ItemsListPage, NewItemPage, ItemDetailPage, PriceListsListPage, NewPriceListPage, EditPriceListPage, InventoryAdjustmentsListPage } from './Items';
+import { ItemsListPage, ItemCreatePage, ItemDetailPage } from './modules/items/items';
+import { PriceListsList, PriceListCreatePage, PriceListEditPage } from './modules/items/price-lists';
 
 
 import { SettingsPage } from '@/core/settings/SettingsPage'
@@ -78,18 +75,18 @@ export function FinanceRoutes() {
       {/* All other routes with PageLayout wrapper */}
       <Route path="*" element={
         <PageLayout>
-          <FinanceLayout>
+          <OldSalesAppLayout>
             <Routes>
               {/* New Modules - Empty Canvas */}
-              <Route index element={<Dashboard />} />
+              <Route index element={<EmptyPlaceholder />} />
               <Route path="items/all-items" element={<ItemsListPage />} />
-              <Route path="items/new" element={<NewItemPage />} />
+              <Route path="items/new" element={<ItemCreatePage />} />
               <Route path="items/:id" element={<ItemDetailPage />} />
-              <Route path="items/:id/edit" element={<NewItemPage />} />
-              <Route path="items/price-lists" element={<PriceListsListPage />} />
-              <Route path="items/price-lists/new" element={<NewPriceListPage />} />
-              <Route path="items/price-lists/edit/:id" element={<EditPriceListPage />} />
-              <Route path="items/inventory-adjustments" element={<InventoryAdjustmentsListPage />} />
+              <Route path="items/:id/edit" element={<ItemCreatePage />} />
+              <Route path="items/price-lists" element={<PriceListsList />} />
+              <Route path="items/price-lists/new" element={<PriceListCreatePage />} />
+              <Route path="items/price-lists/edit/:id" element={<PriceListEditPage />} />
+              <Route path="items/inventory-adjustments" element={<EmptyPlaceholder />} />
               <Route path="items" element={<ItemsListPage />} />
               <Route path="banking" element={<EmptyPlaceholder />} />
               <Route path="banking/*" element={<EmptyPlaceholder />} />
@@ -142,7 +139,7 @@ export function FinanceRoutes() {
               {/* Catch all route */}
               <Route path="*" element={<EmptyPlaceholder />} />
             </Routes>
-          </FinanceLayout>
+          </OldSalesAppLayout>
         </PageLayout>
       } />
     </Routes>
