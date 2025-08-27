@@ -25,7 +25,8 @@ import {
   Truck,
   Mail,
   MessageSquare,
-  Settings
+  Settings,
+  Luggage
 } from 'lucide-react'
 import { Logo } from '@/shared/components/ui/Logo'
 import { getCurrentApp, isPathActive } from '@/utils/appContext'
@@ -62,11 +63,19 @@ const getNavigationForApp = (app: string) => {
               href: '/finance/items/price-lists',
               permission: 'manage_products',
             },
+          ],
+        },
+        {
+          segment: 'inventory',
+          title: 'Inventory',
+          icon: Luggage,
+          isDropdown: true,
+          children: [
             {
               segment: 'inventory-adjustments',
               title: 'Inventory Adjustments',
-              href: '/finance/items/inventory-adjustments',
-              permission: 'manage_products',
+              href: '/finance/inventory/inventory-adjustments',
+              permission: 'manage_inventory',
             },
           ],
         },
@@ -539,7 +548,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const getActiveSegment = (pathname: string, forCollapsed = false) => {
     // Check dropdown children first for exact matches
     for (const item of NAVIGATION) {
-      if (item.isDropdown && item.children) {
+      if ('isDropdown' in item && item.isDropdown && 'children' in item && item.children) {
         for (const child of item.children) {
           if (child.href && pathname.startsWith(child.href)) {
             // In collapsed mode, return parent dropdown segment for indicator
@@ -551,7 +560,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     
     // Then try to find an exact match in top-level items
     const exactMatch = NAVIGATION.find(item => 
-      item.href && pathname === item.href
+      'href' in item && item.href && pathname === item.href
     )?.segment;
     
     if (exactMatch) return exactMatch;
@@ -559,8 +568,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     // For nested routes, find the most specific match
     // Sort by href length (longest first) to prioritize more specific routes
     const matchingItems = NAVIGATION
-      .filter(item => item.href && pathname.startsWith(item.href + '/'))
-      .sort((a, b) => (b.href?.length || 0) - (a.href?.length || 0));
+      .filter(item => 'href' in item && item.href && pathname.startsWith(item.href + '/'))
+      .sort((a, b) => (('href' in b && b.href?.length) || 0) - (('href' in a && a.href?.length) || 0));
     
     return matchingItems[0]?.segment || null;
   }
@@ -579,11 +588,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
     // Initialize with expanded items based on current path
     const initial = new Set<string>();
     NAVIGATION.forEach(item => {
-      if (item.isDropdown && item.children) {
-        const hasActiveChild = item.children.some(child => 
-          location.pathname.startsWith(child.href)
+      if ('isDropdown' in item && item.isDropdown && 'children' in item && item.children) {
+        const hasActiveChild = item.children.some((child: any) => 
+          'href' in child && child.href && location.pathname.startsWith(child.href)
         );
-        if (hasActiveChild) {
+        if (hasActiveChild && item.segment) {
           initial.add(item.segment);
         }
       }
@@ -593,7 +602,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   // State for collapsed dropdown hover
   const [collapsedHoveredItem, setCollapsedHoveredItem] = useState<string | null>(null);
-  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [menuPosition, setMenuPosition] = useState<{top: number, left: number} | null>(null);
 
   useEffect(() => {
@@ -693,10 +702,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
     const isDisabled = item.disabled || (!item.href && !item.isDropdown)
     
     // Handle dropdown items
-    if (item.isDropdown && item.children) {
-      const isExpanded = expandedItems.has(item.segment);
-      const hasActiveChild = item.children.some(child => 
-        location.pathname.startsWith(child.href) || activeItem === child.segment
+    if ('isDropdown' in item && item.isDropdown && 'children' in item && item.children) {
+      const isExpanded = expandedItems.has(item.segment || '');
+      const hasActiveChild = item.children.some((child: any) => 
+        'href' in child && child.href && (location.pathname.startsWith(child.href) || activeItem === child.segment)
       );
       
       return (
@@ -712,10 +721,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
               } else {
                 // In expanded mode, toggle normal dropdown (accordion behavior - only one open at a time)
                 setExpandedItems(prev => {
-                  const newSet = new Set();
-                  if (!prev.has(item.segment)) {
+                  const newSet = new Set<string>();
+                  if (!prev.has(item.segment || '')) {
                     // If this item is not expanded, close all others and open this one
-                    newSet.add(item.segment);
+                    newSet.add(item.segment || '');
                   }
                   // If this item was already expanded, close it (newSet remains empty)
                   return newSet;
